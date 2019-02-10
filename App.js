@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, WebView, ActivityIndicator } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, WebView, ActivityIndicator, BackHandler } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import {BlurView} from 'expo'
@@ -7,23 +7,41 @@ import {BlurView} from 'expo'
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    url: 'http://moojmaro.com/'
   };
+
+  webView = {
+    canGoBack: false,
+    ref: null,
+  }
+
+  componentDidMount(){
+    const self = this
+    BackHandler.addEventListener('hardwareBackPress', function() {
+      // this.onMainScreen and this.goBack are just examples, you need to use your own implementation here
+      if (self.webView.canGoBack && self.webView.ref) {
+        self.webView.ref.goBack()
+        return true
+      }
+    })
+  }
 
   render() {
     return (
       <View style = {styles.container}>
-      {!this.state.isLoadingComplete &&
-        <BlurView tint = 'dark' style={styles.loading}>
-          <ActivityIndicator size='large' color="#FB8725"  />
-        </BlurView>
-      }
-
-      <WebView
-        onLoadStart={()=>this.setState({isLoadingComplete:false})}
-        onLoadEnd={()=>this.setState({isLoadingComplete:true})}
-        source={{uri: 'http://moojmaro.com/'}}
-        style={{marginTop: 25}}
-      />
+        {!this.state.isLoadingComplete &&
+          <BlurView tint = 'dark' style={styles.loading}>
+            <ActivityIndicator size='large' color="#FB8725"  />
+          </BlurView>
+        }
+        <WebView
+          ref={webView => this.webView.ref = webView }
+          onNavigationStateChange={navState => this.webView.canGoBack = navState.canGoBack }
+          onLoad={() => this.setState({isLoadingComplete:true}) }
+          onLoadStart={() => this.setState({isLoadingComplete:false})}
+          source={{uri: this.state.url}}
+          style={{marginTop: 25}}
+        />
       </View>
     )
   }

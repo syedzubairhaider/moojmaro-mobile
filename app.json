@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "moojmaro",
-    "slug": "Moojmaro",
+    "slug": "moojmaro",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -13,11 +13,11 @@
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#FB8725"
     },
     "android": {
-      "package": "com.yourcompany.yourappname"
+      "package": "com.moojmaro.moojmaro"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
